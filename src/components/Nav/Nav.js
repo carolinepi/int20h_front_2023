@@ -2,11 +2,13 @@ import './style/Nav.css';
 import logo from './images/logo.png';
 
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 
 function Nav()
 {
     const [name, setName] = useState("");
+    const location = useLocation();
+    const searchBy = location.pathname.includes("ingredients") ? "ingredients" : "recipes"
 
     return(
         <nav className="navbar navbar-expand-lg nav">
@@ -28,8 +30,13 @@ function Nav()
                         <li className='nav-item'><Link className='nav-link text-dark' to='/user'>User</Link></li>
 
                     </ul>
-                    <form className="d-flex right" role="search" action={`/recipes/search/${name}`}>
-                        <input className="form-control me-2" type='text' placeholder="Search" value={name} onChange={e => setName(e.target.value)}aria-label="Search"/>
+                    <form className="d-flex right" role="search" action={`/recipes/search/${searchBy}/${name}`}>
+                        <input className="form-control me-2" type='text'
+                               placeholder={"Search by " + searchBy}
+                               value={name}
+                               onChange={e => setName(e.target.value)}
+                               aria-label="Search"
+                        />
                             <button className="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </div>
