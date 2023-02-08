@@ -27,7 +27,6 @@ function Nav()
                     <ul className='navbar-nav me-auto mb-2 mb-lg-0 size'>
                         <li className='nav-item mr'><Link className='nav-link text-dark' to='/'>Home</Link></li>
                         <li className='nav-item'><Link className='nav-link text-dark' to='/ingredients'>Ingredients</Link></li>
-                        <li className='nav-item'><Link className='nav-link text-dark' to='/user'>User</Link></li>
 
                     </ul>
                     <form className="d-flex right" role="search" action={`/recipes/search/${searchBy}/${name}`}>

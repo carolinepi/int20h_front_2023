@@ -13,7 +13,6 @@ import IngredientDetails from './components/Ingredients/IngredientDetails';
 import AreaRecipes from './components/Areas/AreaRecipes';
 import Page404 from './components/Pages/Page404';
 import Ingredients from "./components/Pages/Ingredients";
-import User from "./components/Pages/User";
 import Footer from "./components/Footer/Footer";
 
 function App()
@@ -25,7 +24,6 @@ function App()
         <Switch>
           <Route path='/' exact component={Home}/>
           <Route path='/ingredients' exact component={Ingredients}/>
-          <Route path='/user' exact component={User}/>
           <Route path='/recipes/id/:id' exact component={RecipeDetails}/>
           <Route path='/recipes/search/:pathname/:input' exact component={SearchRecipes} />
           <Route path='/categories/:name' exact component={CategoryDetails} />

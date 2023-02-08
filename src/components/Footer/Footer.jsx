@@ -1,6 +1,5 @@
 import React from 'react';
 import './style/style.css'
-import linkedin from "../Pages/images/linkedin-image.png";
 
 export const Footer = ()=>
 {
@@ -12,9 +11,6 @@ export const Footer = ()=>
                         <div className='footer-p'>Best team></div>
                     </div>
 
-                    <div className='link-images'>
-                        <a href='https://www.linkedin.com/'><img className='linkedin-image' src={linkedin} alt='T_T'/></a>
-                    </div>
                 </div>
             </div>
 

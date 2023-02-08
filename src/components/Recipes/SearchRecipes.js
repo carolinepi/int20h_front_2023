@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import LoadingPage from '../Pages/LoadingPage';
-import NoContent from '../Pages/NoContent';
 import IngredientsList from "../Ingredients/IngredientsList";
 import FeaturedRecipesList from "../FeaturedRecipes/FeaturedRecipesList";
 

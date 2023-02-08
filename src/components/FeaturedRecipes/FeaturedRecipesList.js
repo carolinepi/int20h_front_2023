@@ -5,8 +5,11 @@ import Page404 from "../Pages/Page404";
 
 function FeaturedRecipesList(props)
 {
+    const user = null;
+
     const [recipes, setRecipes] = useState([]);
     const [page, setPage] = useState(1);
+    const [showUser, setShowUser] = useState(false);
     const [nextPage, setNextPage] = useState(null);
     const [difficultyLevel, setDifficultyLevel] = useState(null);
     const difficultyLevels = ['-difficulty_level', '+difficulty_level']
@@ -19,6 +22,8 @@ function FeaturedRecipesList(props)
         setPage(1);
     }
 
+    const handleChangeShowUser = () => setShowUser(!showUser);
+
     useEffect(() => {
         fetch(`http://0.0.0.0:8080/api/recipe/search`, {
             method: 'POST',
@@ -26,8 +31,12 @@ function FeaturedRecipesList(props)
             cache: 'no-cache',
             credentials: 'same-origin',
             body: JSON.stringify(
-                {page, query: props.searchWord, sort: difficultyLevel}
-            )
+            {
+                page,
+                query: props.searchWord,
+                sort: difficultyLevel,
+                for_user: !!user && showUser
+            })
         })
             .then(response => response.json())
             .then(data => {
@@ -37,7 +46,7 @@ function FeaturedRecipesList(props)
                 else setRecipes([...recipes, ...data.payload.recipes])
                 setNextPage(data.payload.nextPage);
             })
-    }, [page, props.searchWord, difficultyLevel]);
+    }, [page, props.searchWord, difficultyLevel, user, showUser]);
 
     return(
         <>
@@ -54,6 +63,14 @@ function FeaturedRecipesList(props)
                             <option className="dropdown__option" key={level}>{level}</option>
                         ))}
                     </select>
+                    {user
+                        ? (
+                            <label>
+                                <input type="checkbox" checked={showUser} onChange={handleChangeShowUser} />
+                                Show only user product
+                            </label>
+                        ) : null
+                    }
                     <div className='recipes-list'>
                         {recipes.map((recipe) => (
                             <Recipe recipe={recipe} key={recipe._id}/>

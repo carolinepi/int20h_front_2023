@@ -6,17 +6,37 @@ import Page404 from '../Pages/Page404';
 
 function IngredientsList(props)
 {
+    const user = true;
+
     const [ingredients, setIngredients] = useState([]);
     const [loading, setLoading] = useState(true);
 
     setTimeout(() => setLoading(false), 5000);
     const [categoryTypes, setCategoryTypes] = useState([]);
     const [ingredientType, setIngredientType] = useState(null);
+    const [showUser, setShowUser] = useState(false);
 
     const [page, setPage] = useState(1);
     const [nextPage, setNextPage] = useState(null);
     const moreIngredientsHandler = () => setPage(page + 1);
-    const addIngredient = () => 1;
+
+    const handleChangeShowUser = () => setShowUser(!showUser);
+
+
+    const addIngredient = (ingredientId) => {
+        fetch(`http://0.0.0.0:8080/api/user/product`,{
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            body: JSON.stringify({product_id: ingredientId})
+        })
+            .then(response => response.json())
+            .then(data => {
+            if(data.status !== 'success') return;
+            console.log('Successful added');
+        })
+    };
 
     const selectIngredients = e => {
         setIngredientType(e.target.value);
@@ -34,8 +54,12 @@ function IngredientsList(props)
             cache: 'no-cache',
             credentials: 'same-origin',
             body: JSON.stringify(
-                {page, ingredient_type: ingredientType, query: props.searchWord}
-            )
+            {
+                page,
+                ingredient_type: ingredientType,
+                query: props.searchWord,
+                for_user: !!user && showUser
+            })
         })
             .then(response => response.json())
             .then(data => {
@@ -45,7 +69,7 @@ function IngredientsList(props)
                 else setIngredients([...ingredients, ...data.payload.ingredients]);
                 setNextPage(data.payload.nextPage);
             });
-    }, [page, ingredientType, props.searchWord]);
+    }, [page, ingredientType, props.searchWord, user, showUser]);
 
     useEffect(() => {
         fetch(`http://0.0.0.0:8080/api/ingredient_types`,{
@@ -74,6 +98,14 @@ function IngredientsList(props)
                         <option className="dropdown__option" key={categoryType.title}>{categoryType.title}</option>
                     ))}
                 </select>
+                {user
+                    ? (
+                        <label>
+                            <input type="checkbox" checked={showUser} onChange={handleChangeShowUser} />
+                            Show only recipes available for user
+                        </label>
+                    ) : null
+                }
                 <div className='ingredient-list'>
                     {ingredients.map((ingredient) => (
                         <div className='ingredient' key={ingredient._id}>
@@ -84,7 +116,7 @@ function IngredientsList(props)
                                 <div className='ingredient-name'>{ingredient.title}</div>
                             </Link>
                             <div className='button-container'>
-                                <button className='recipe-but' onClick={addIngredient}>Add</button>
+                                <button className='recipe-but' onClick={() => addIngredient(ingredient._id)}>Add</button>
                             </div>
                         </div>
                     ))}
